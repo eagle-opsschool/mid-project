@@ -32,37 +32,9 @@ resource "aws_security_group" "mid_project_security_group" {
   vpc_id = "${aws_vpc.mid_project_vpc.id}"
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 65433
-    to_port     = 65433
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 5601
-    to_port     = 5601
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  ingress {
-    from_port   = 9200
-    to_port     = 9200
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -353,7 +325,7 @@ resource "aws_instance" "ansible_master" {
     inline = [
       "chmod 600 /home/ubuntu/.ssh/id_rsa",
       "git clone https://github.com/eagle-opsschool/mid-project.git",
-      "cd ansible",
+      "cd mid-project/ansible",
       "ansible-playbook site.yml",
     ]
   }

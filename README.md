@@ -10,6 +10,8 @@ The project assume one has ~/.aws/credentials set. Also, one should add to terra
 ## Usage
 ```bash
 git clone https://github.com/eagle-opsschool/mid-project.git
+cd mid-project
+terraform init
 terraform apply --auto-approve
 ```
 
