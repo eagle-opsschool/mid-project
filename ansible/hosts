@@ -1,0 +1,14 @@
+prometheus ansible_host=10.0.0.104
+
+grafana ansible_host=10.0.0.105
+
+kibana ansible_host=10.0.0.106
+
+[consul]
+consul1 ansible_host=10.0.0.107
+consul2 ansible_host=10.0.0.108
+consul3 ansible_host=10.0.0.109
+
+[dummy_exporters]
+dummy_exporter1 ansible_host=10.0.0.102
+dummy_exporter2 ansible_host=10.0.0.103

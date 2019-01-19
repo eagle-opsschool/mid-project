@@ -1,0 +1,49 @@
+---
+
+- name: Ensure dependencies are installed
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+  state: present
+
+- name: Add Docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+    update_cache: true
+
+- name: Install docker
+  apt: name=docker-ce update_cache=yes state=present
+  notify: restart docker
+
+- name: Ensure handlers are notified now to avoid firewall conflicts
+  meta: flush_handlers
+
+- name: Download dummy_exporter.py
+  copy: src=my_dummy_exporter.py dest=/home/ubuntu/
+#  get_url: url=https://raw.githubusercontent.com/ops-school/session-monitoring/master/training_session/my_dummy_exporter.py dest=/home/ubuntu/
+
+- name: Copy the Dockerfile
+  copy: src=Dockerfile dest=/home/ubuntu/Dockerfile
+
+- name: Copy running script
+  copy: src=run_my_dummy_exporter.sh dest=/home/ubuntu/run_my_dummy_exporter.sh
+
+- name: Build dockerfile
+  shell: cd /home/ubuntu && docker build -t dummy_exporter .
+
+- name: Run dockerize dummy_exporter
+  shell: cd /home/ubuntu && docker run -p 65433:65433 -v /var/log/dummy/:/var/log/ dummy_exporter &
+
+- name: Copy consul registration json
+  template: src=payload.json dest=/home/ubuntu/payload.json
+
+- name: Register to consul
+  shell: curl -X PUT --data-binary @/home/ubuntu/payload.json http://10.0.0.107:8500/v1/agent/service/register

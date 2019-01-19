@@ -1,0 +1,15 @@
+output:
+  logstash:
+    hosts: ["10.0.0.106:5044"]
+
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /var/log/syslog
+        - /var/log/auth.log
+      document_type: syslog
+    -
+      paths:
+       - /var/log/dummy/*
+      document_type: dummy_exporter

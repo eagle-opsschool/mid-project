@@ -1,0 +1,33 @@
+---
+
+- hosts: prometheus
+  become: yes
+  roles:
+  - prometheus
+  - filebeat
+
+- hosts: grafana
+  become: yes
+  roles:
+  - grafana
+  - filebeat
+
+- hosts: consul
+  become: yes
+  roles:
+  - consul
+  - filebeat
+
+- hosts: dummy_exporters
+  become: yes
+  roles:
+  - dummy_exporter
+  - node-exporter
+  - filebeat
+
+- hosts: kibana
+  become: yes
+  roles:
+  - elk
+  - filebeat
+
